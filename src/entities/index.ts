@@ -1,5 +1,7 @@
+import { Address } from "./address.entity"
 import { User } from "./user.entity"
 
 export {
-    User
+    User, 
+    Address
 }

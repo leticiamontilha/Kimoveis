@@ -7,7 +7,7 @@ import {
 
  @Entity('addresses')
  
-export class address {
+export class Address {
 
     @PrimaryGeneratedColumn('increment')
     id: number
