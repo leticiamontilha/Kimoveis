@@ -10,14 +10,18 @@ const userSchema = z.object({
     })
 })
 
-const returnUser = userSchema.extend({
+const returnUserSchema = userSchema.extend({
     id: z.number(),
     createdAt: z.date(),
     updatedAt: z.date(),
     deletedAt: z.date().nullable()
 }).omit({password: true})
 
+const returnAllUsersSchema = returnUserSchema.array()
+
 export {
     userSchema,
-    returnUser
+    returnUserSchema,
+    returnAllUsersSchema
+    
 }
