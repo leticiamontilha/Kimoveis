@@ -33,7 +33,8 @@ export class RealEstate {
     @UpdateDateColumn()
     updatedAt: string
 
-    @ManyToOne(() => Category)
+    @OneToOne(() => Category)
+    @JoinColumn()
     category: Category
 
     @OneToOne(() => Address)

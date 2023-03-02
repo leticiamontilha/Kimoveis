@@ -1,10 +1,9 @@
 import {Request, Response} from "express"
-import { ICategory } from "../interfaces/categories.interface"
-import { IUser } from "../interfaces/users.interface"
+import { IUser, IUserUpdate } from "../interfaces/users.interface"
 import createUserService from "../services/users/createUser.service"
 import listAllUsersService from "../services/users/listAllUsers.service"
 import softDeleteUserService from "../services/users/softDeleteUser.service"
-import createCategoryService from "../services/categories/createCategory.service"
+import updateUserService from "../services/users/updateUser.service"
 
 const createUserController = async (request: Request, response: Response) => {
    
@@ -22,6 +21,16 @@ const listAllUsersController = async (request: Request, response: Response) => {
     return response.json(allUsers)
 }   
 
+const updateUserController = async (request: Request, response: Response) => {
+
+    const userData: IUserUpdate = request.body
+    const idUser = Number(request.params.id)
+
+    const updatedUser = await updateUserService(userData, idUser)
+
+    return response.json(updatedUser)
+}
+
 const softDeleteUserController = async (request: Request, response: Response) => {
     
     const userId = +request.params.id
@@ -31,18 +40,9 @@ const softDeleteUserController = async (request: Request, response: Response) =>
     return response.json()
 }
 
-const createCategoryController = async (request: Request, response: Response) => {
-   
-    const categoryData: ICategory = request.body
-   
-    const newCategory = await createCategoryService(categoryData)
-    
-    return response.status(201).json(newCategory)
-}
-
 export {
     createUserController,
     listAllUsersController,
     softDeleteUserController,
-    createCategoryController
+    updateUserController
 }

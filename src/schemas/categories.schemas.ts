@@ -8,7 +8,10 @@ const returnCategorySchema = createCategorySchema.extend({
     id: z.number(),
 })
 
+const returnAllCategoriesSchema = returnCategorySchema.array()
+
 export {
     createCategorySchema,
-    returnCategorySchema
+    returnCategorySchema,
+    returnAllCategoriesSchema
 }

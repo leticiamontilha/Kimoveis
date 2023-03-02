@@ -19,12 +19,12 @@ export class Address {
     zipCode: string
 
     @Column({ length: 6, nullable: true})
-    number: string
+    number?: string
 
     @Column({length: 20})
     city: string
 
-    @Column({length: 20})
+    @Column({length: 2})
     state: string
  }
 
