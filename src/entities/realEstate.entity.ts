@@ -5,12 +5,11 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToOne,
-    ManyToMany,
-    ManyToOne
+    ManyToOne,
+    JoinColumn
  } from "typeorm"
 import { Address } from "./address.entity";
 import { Category } from "./category.entity";
-
 
  @Entity('real_estate')
  
@@ -35,7 +34,11 @@ export class RealEstate {
     updatedAt: string
 
     @ManyToOne(() => Category)
-    Category: Category
+    category: Category
+
+    @OneToOne(() => Address)
+    @JoinColumn()
+    adress: Address
  }
 
  
