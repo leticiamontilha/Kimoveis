@@ -22,9 +22,9 @@ export class Address {
     number: string
 
     @Column({length: 20})
-    coty: string
+    city: string
 
-    @Column({length: 2})
+    @Column({length: 20})
     state: string
  }
 
