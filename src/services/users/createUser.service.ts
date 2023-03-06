@@ -16,7 +16,7 @@ const createUserService = async (userData: IUser): Promise<IUserReturn> => {
     })
     
     if(emailExist){
-        throw new AppError("User already exists.", 409)
+        throw new AppError("Email already exists", 409)
     }
 
     const user = userRepository.create(userData)

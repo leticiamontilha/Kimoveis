@@ -1,37 +1,49 @@
-import { Repository } from "typeorm"
 import { AppDataSource } from "../../data-source"
 import { Address, Category, RealEstate } from "../../entities"
 import { AppError } from "../../errors"
-import {returnRealEstateSchema} from "../../schemas/realEstate.schemas"
+import { IAddress, IRealEstateRequest, IRealEstateReturn } from "../../interfaces/realEstates.interface"
+import { returnRealEstateSchema } from "../../schemas/realEstate.schemas"
 
-const createRealEstateService = async (estateData: any) => {
-    const addressRepository: Repository<Address> = AppDataSource.getRepository(Address)
-    const realEstateRepository: Repository<RealEstate> = AppDataSource.getRepository(RealEstate)
-    const categoryRepository: Repository<Category> = AppDataSource.getRepository(Category)
+const createRealEstateService = async (estateData: IRealEstateRequest ): Promise<IRealEstateReturn> => {
+    const addressRepository = AppDataSource.getRepository(Address)
+    const realEstateRepository = AppDataSource.getRepository(RealEstate)
+    const categoryRepository = AppDataSource.getRepository(Category)
 
-    const addressExist = await addressRepository.findOneBy({
-        street: estateData.address.street
+    const categoryId = await categoryRepository.findOneBy({
+        id: estateData.categoryId
     })
 
-    if(addressExist){
-        throw new AppError("Address already registered", 409)
+    if(!categoryId){
+        throw new AppError("Category not found", 404)
     }
 
-    const categoryExist = await categoryRepository.findOneBy({
-        id: estateData.category
+    const address: Address | null = await addressRepository.findOneBy({
+        number: estateData.address.number ? estateData.address.number : "",
+        street: estateData.address.street,
+        zipCode: estateData.address.zipCode,
+        city: estateData.address.city,
+        state: estateData.address.state 
     })
 
-    if(!categoryExist){
-        throw new AppError("Category not found", 409)
+    if(address) {
+        throw new AppError("Address alredy exist", 409)
     }
 
-    const newRealEstate = realEstateRepository.create(estateData)
+    let newAddress: Address = addressRepository.create(estateData.address)
+
+    await addressRepository.save(newAddress)
+
+    const newRealEstate: RealEstate | IRealEstateReturn = realEstateRepository.create({
+        ...estateData, 
+        address: newAddress, 
+        category: categoryId
+    })
 
     await realEstateRepository.save(newRealEstate)
 
-    const newEstate = returnRealEstateSchema.parse(estateData)
-    
-    return newEstate
+    const returnEstate = returnRealEstateSchema.parse(newRealEstate)
+   
+    return returnEstate
 }
 
 export default createRealEstateService

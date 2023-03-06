@@ -1,13 +1,16 @@
 import { z } from "zod"
-import { createRealEstateSchema, returnAllRealEstatesSchema, returnRealEstateSchema } from "../schemas/realEstate.schemas"
+import { createAdressSchema, createRealEstateSchema, returnAllRealEstatesSchema, returnRealEstateSchema } from "../schemas/realEstate.schemas"
 
-type IRealEstate = z.infer<typeof createRealEstateSchema>
+type IRealEstateRequest = z.infer<typeof createRealEstateSchema>
 type IRealEstateReturn = z.infer<typeof returnRealEstateSchema>
 type IAllRealEstatesReturn = z.infer<typeof returnAllRealEstatesSchema>
 
+type IAddress = z.infer<typeof createAdressSchema>
+
 
 export {
-    IRealEstate,
+    IRealEstateRequest,
     IRealEstateReturn,
-    IAllRealEstatesReturn
+    IAllRealEstatesReturn,
+    IAddress
 }

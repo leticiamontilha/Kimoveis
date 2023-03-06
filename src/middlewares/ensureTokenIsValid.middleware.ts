@@ -19,7 +19,8 @@ const ensureTokenIsValidMidlleware = (request: Request, response: Response, next
 
         request.user = {
             id: Number(decoded?.sub),
-            email: decoded.email
+            email: decoded.email,
+            admin: decoded.admin
         }
 
         return next()

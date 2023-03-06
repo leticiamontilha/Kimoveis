@@ -6,7 +6,8 @@ import {
     UpdateDateColumn,
     OneToOne,
     ManyToOne,
-    JoinColumn
+    JoinColumn,
+    OneToMany
  } from "typeorm"
 import { Address } from "./address.entity";
 import { Category } from "./category.entity";
@@ -22,7 +23,7 @@ export class RealEstate {
     sold: boolean 
 
     @Column({ type: "decimal", precision: 12, scale: 2, default: 0 })
-    value: number | string;
+    value: number | string
 
     @Column({ type: "integer"})
     size: Number
@@ -33,13 +34,12 @@ export class RealEstate {
     @UpdateDateColumn()
     updatedAt: string
 
-    @OneToOne(() => Category)
-    @JoinColumn()
+    @ManyToOne(() => Category)
     category: Category
 
     @OneToOne(() => Address)
     @JoinColumn()
-    adress: Address
+    address: Address
  }
 
  
