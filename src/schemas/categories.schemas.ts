@@ -5,10 +5,11 @@ const createCategorySchema = z.object({
 })
 
 const returnCategorySchema = createCategorySchema.extend({
-    id: z.number(),
+    id: z.number()
 })
 
 const returnAllCategoriesSchema = returnCategorySchema.array()
+
 
 export {
     createCategorySchema,

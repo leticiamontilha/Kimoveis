@@ -28,10 +28,10 @@ export class RealEstate {
     @Column({ type: "integer"})
     size: Number
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "date"})
     createdAt: string
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({type: "date"})
     updatedAt: string
 
     @ManyToOne(() => Category)

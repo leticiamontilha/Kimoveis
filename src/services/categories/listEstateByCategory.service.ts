@@ -1,23 +1,25 @@
 import { AppDataSource } from "../../data-source"
-import { Category, RealEstate } from "../../entities"
+import { Category } from "../../entities"
+import { AppError } from "../../errors"
+
 
 const listEstateByCategoryService = async (id: number) =>{
     const categoriesRepository = AppDataSource.getRepository(Category)
-    const estateRepository = AppDataSource.getRepository(RealEstate)
 
-    const category = await categoriesRepository.findOneBy({
-        id: id
-    })
-
-    const estate = await estateRepository.find({
+    const category = await categoriesRepository.findOne({
+        where: {
+            id: id
+        },
         relations: {
-            category: true
+            realEstate: true
         }
     })
 
-    const estatesByCategories = estate.filter((el) => el.category.id === category?.id)
+    if(!category){
+        throw new AppError("Category not found", 404)
+    }
 
-    return estatesByCategories
+    return category
 }
 
 export default listEstateByCategoryService

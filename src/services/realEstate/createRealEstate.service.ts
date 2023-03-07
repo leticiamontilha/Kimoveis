@@ -1,7 +1,8 @@
+import { Repository } from "typeorm"
 import { AppDataSource } from "../../data-source"
 import { Address, Category, RealEstate } from "../../entities"
 import { AppError } from "../../errors"
-import { IAddress, IRealEstateRequest, IRealEstateReturn } from "../../interfaces/realEstates.interface"
+import { IRealEstateRequest, IRealEstateReturn } from "../../interfaces/realEstates.interface"
 import { returnRealEstateSchema } from "../../schemas/realEstate.schemas"
 
 const createRealEstateService = async (estateData: IRealEstateRequest ): Promise<IRealEstateReturn> => {
@@ -9,11 +10,11 @@ const createRealEstateService = async (estateData: IRealEstateRequest ): Promise
     const realEstateRepository = AppDataSource.getRepository(RealEstate)
     const categoryRepository = AppDataSource.getRepository(Category)
 
-    const categoryId = await categoryRepository.findOneBy({
+    const category = await categoryRepository.findOneBy({
         id: estateData.categoryId
     })
 
-    if(!categoryId){
+    if(!category){
         throw new AppError("Category not found", 404)
     }
 
@@ -26,18 +27,20 @@ const createRealEstateService = async (estateData: IRealEstateRequest ): Promise
     })
 
     if(address) {
-        throw new AppError("Address alredy exist", 409)
+        throw new AppError("Address alredy exists", 409)
     }
-
+    
     let newAddress: Address = addressRepository.create(estateData.address)
 
     await addressRepository.save(newAddress)
 
-    const newRealEstate: RealEstate | IRealEstateReturn = realEstateRepository.create({
+    const newRealEstate = realEstateRepository.create({
         ...estateData, 
         address: newAddress, 
-        category: categoryId
+        category
     })
+
+    console.log(newRealEstate)
 
     await realEstateRepository.save(newRealEstate)
 
