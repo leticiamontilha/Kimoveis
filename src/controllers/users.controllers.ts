@@ -26,7 +26,7 @@ const updateUserController = async (request: Request, response: Response) => {
     const userData: IUserUpdate = request.body
     const idUser = Number(request.params.id)
 
-    const updatedUser = await updateUserService(userData, idUser)
+    const updatedUser = await updateUserService(userData, idUser, request)
 
     return response.json(updatedUser)
 }
@@ -37,7 +37,7 @@ const softDeleteUserController = async (request: Request, response: Response) =>
 
     await softDeleteUserService(userId)
 
-    return response.json()
+    return response.status(204).json()
 }
 
 export {

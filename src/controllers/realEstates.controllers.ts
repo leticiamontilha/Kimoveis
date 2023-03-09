@@ -6,7 +6,7 @@ const createRealEstateController = async (request: Request, response: Response) 
    
     const newRealEstate = await createRealEstateService(request.body);
 
-    return response.json(newRealEstate);
+    return response.status(201).json(newRealEstate);
 }
 
 const listAllRealEstateController = async (request: Request, response: Response) => {

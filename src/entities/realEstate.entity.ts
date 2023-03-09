@@ -11,6 +11,7 @@ import {
  } from "typeorm"
 import { Address } from "./address.entity";
 import { Category } from "./category.entity";
+import { Schedule } from "./schedule.entity";
 
  @Entity('real_estate')
  
@@ -40,6 +41,9 @@ export class RealEstate {
     @OneToOne(() => Address)
     @JoinColumn()
     address: Address
+
+    @OneToMany(() => Schedule, (schedule) => schedule.realEstate)
+    schedules: Schedule[]
  }
 
  

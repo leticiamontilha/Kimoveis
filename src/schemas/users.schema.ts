@@ -16,8 +16,15 @@ const returnUserSchema = userSchema.extend({
 
 const returnAllUsersSchema = returnUserSchema.array()
 
+const updateUserSchema = z.object({
+    name: z.string().max(45).optional(),
+    email: z.string().email().optional(),
+    password: z.string().optional(),
+  });
+
 export {
     userSchema,
     returnUserSchema,
-    returnAllUsersSchema   
+    returnAllUsersSchema,
+    updateUserSchema   
 }

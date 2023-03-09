@@ -40,8 +40,6 @@ const createRealEstateService = async (estateData: IRealEstateRequest ): Promise
         category
     })
 
-    console.log(newRealEstate)
-
     await realEstateRepository.save(newRealEstate)
 
     const returnEstate = returnRealEstateSchema.parse(newRealEstate)

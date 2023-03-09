@@ -22,8 +22,8 @@ const createRealEstateSchema= z.object({
 
 const returnRealEstateSchema = createRealEstateSchema.extend({
     id: z.number(),
-    createdAt: z.date().or(z.string()),
-    updatedAt: z.date().or(z.string()),
+    createdAt: z.string(),
+    updatedAt: z.string(),
     sold: z.boolean().default(false)
 }).omit({
     categoryId: true
