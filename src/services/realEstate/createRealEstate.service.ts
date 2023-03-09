@@ -2,8 +2,7 @@ import { Repository } from "typeorm"
 import { AppDataSource } from "../../data-source"
 import { Address, Category, RealEstate } from "../../entities"
 import { AppError } from "../../errors"
-import { IRealEstateRequest, IRealEstateReturn } from "../../interfaces/realEstates.interface"
-import { returnRealEstateSchema } from "../../schemas/realEstate.schemas"
+import { IRealEstateRequest } from "../../interfaces/realEstates.interface"
 
 const createRealEstateService = async (estateData: IRealEstateRequest ): Promise<RealEstate> => {
     const addressRepository = AppDataSource.getRepository(Address)
@@ -27,9 +26,9 @@ const createRealEstateService = async (estateData: IRealEstateRequest ): Promise
     })
 
     if(address) {
-        throw new AppError("Address alredy exists", 409)
+        throw new AppError("Address already exists", 409)
     }
-    
+
     let newAddress: Address = addressRepository.create(estateData.address)
 
     await addressRepository.save(newAddress)

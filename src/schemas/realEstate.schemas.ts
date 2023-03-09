@@ -4,7 +4,7 @@ import { returnCategorySchema } from './categories.schemas'
 const createAdressSchema = z.object({
         street: z.string(),
         zipCode: z.string().max(8, {message: "String must contain at most 8 character(s)"}),
-        number: z.string().max(7).optional(),
+        number: z.string().max(7).optional().nullable(),
         city: z.string(),
         state: z.string().max(2, {message: "String must contain at most 2 character(s)"})
 })
@@ -16,7 +16,7 @@ const createAdressSchema = z.object({
 const createRealEstateSchema= z.object({
     value: z.number().or(z.string()),
     size: z.number().int().min(0, {message: "Number must be greater than 0"}),
-    address: returnAddressSchema,
+    address: createAdressSchema,
     categoryId: z.number()
 })
 
