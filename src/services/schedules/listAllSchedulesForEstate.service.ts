@@ -2,24 +2,35 @@ import { AppDataSource } from "../../data-source"
 import { RealEstate, Schedule } from "../../entities"
 import { AppError } from "../../errors"
 
-const listAllSchedulesForEstateService = async (idEstate: number) => {
+const listAllSchedulesForEstate = async (idEstate: number) => {
     const realEstateRepository = AppDataSource.getRepository(RealEstate)
+   
+    const realEstate = await realEstateRepository.findOne({
+        where: {
+            id: idEstate
+        }
+    })
 
-    const schedules = await realEstateRepository.findOne({
+    if(!realEstate){
+        throw new AppError("RealEstate not found", 404)
+    }
+
+    const allSchedules = await realEstateRepository.findOne({
         where: {
             id: idEstate
         },
         relations: {
-            schedules: true
+            address: true,
+            category: true,
+            schedules: {
+                user: true
+            }
         }
     })
     
-    if(!schedules){
-        throw new AppError("Schedule not found", 404)
-    }
 
-    return schedules
-
+    return allSchedules
+    
 }
 
-export default listAllSchedulesForEstateService
+export default listAllSchedulesForEstate

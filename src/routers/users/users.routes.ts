@@ -12,6 +12,6 @@ const userRoutes: Router = Router()
 userRoutes.post("", ensureDataIsValidMiddleware(userSchema), createUserController)
 userRoutes.get("", ensureTokenIsValidMidlleware, verifyAdminPermission, listAllUsersController)
 userRoutes.patch("/:id", ensureTokenIsValidMidlleware, userIdExist, ensureDataIsValidMiddleware(updateUserSchema), updateUserController)
-userRoutes.delete("/:id", ensureTokenIsValidMidlleware, verifyAdminPermission, userIdExist, softDeleteUserController)
+userRoutes.delete("/:id", ensureTokenIsValidMidlleware, userIdExist, verifyAdminPermission, softDeleteUserController)
 
 export default userRoutes

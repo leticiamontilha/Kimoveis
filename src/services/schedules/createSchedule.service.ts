@@ -48,11 +48,41 @@ const createScheduleService = async (data: ISchedule, token: string): Promise<Sc
         throw new AppError("Invalid date, work days are monday to friday", 400)
     }
 
+
+    const estateId = data.realEstateId
+    const hour = data.hour
+    const date = data.date
+
+    const verifyDisponibityEstate = await AppDataSource.getRepository(Schedule)
+        .createQueryBuilder("schedules")
+        .leftJoinAndSelect("schedules.realEstate", "realEstate")
+        .where("schedules.date = :date", { date })
+        .andWhere("schedules.hour = :hour", { hour })
+        .andWhere("realEstate.id = :estateId", { estateId })
+        .getOne()
+
+    if(verifyDisponibityEstate){
+        throw new AppError("Schedule to this real estate at this date and time already exists", 409);
+    }
+
+    const verifyDisponibityUser = await AppDataSource.getRepository(Schedule)
+    .createQueryBuilder("schedules")
+    .leftJoinAndSelect("schedules.user", "user")
+    .where("user.id = schedules.userId")
+    .andWhere("schedules.date = :date", { date })
+    .andWhere("schedules.hour = :hour", { hour })
+    .getOne();
+
+    if (verifyDisponibityUser) {
+        throw new AppError("User schedule to this real estate at this date and time already exists", 409);
+    }
+
     const schedule = scheduleRepository.create({
         ...data,
         realEstate: realEstate!,
         user: user!
     })
+
 
     await scheduleRepository.save(schedule)
 

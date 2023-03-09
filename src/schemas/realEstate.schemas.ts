@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { any, z } from 'zod'
 import { returnCategorySchema } from './categories.schemas'
 
 const createAdressSchema = z.object({
@@ -10,13 +10,13 @@ const createAdressSchema = z.object({
 })
 
  const returnAddressSchema = createAdressSchema.extend({
-    id: z.number()
+    id: z.any()
  })
 
 const createRealEstateSchema= z.object({
     value: z.number().or(z.string()),
-    size: z.number().int(),
-    address: createAdressSchema,
+    size: z.number().int().min(0, {message: "Number must be greater than 0"}),
+    address: returnAddressSchema,
     categoryId: z.number()
 })
 
@@ -29,18 +29,22 @@ const returnRealEstateSchema = createRealEstateSchema.extend({
     categoryId: true
 })
 
-const returnAllRealEstatesSchema = returnRealEstateSchema.array()
-
-const returnEstatesByCategorySchema = z.object({
-    category: returnCategorySchema,
-    estates: returnAllRealEstatesSchema
+const returnAllEstates = z.object({
+    id: z.number(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    sold: z.boolean().default(false),
+    address: returnAddressSchema,
+    category: returnCategorySchema
 })
+
+const returnAllRealEstatesSchema = returnAllEstates.array()
+
 
 export {
     createRealEstateSchema,
     returnRealEstateSchema,
     returnAllRealEstatesSchema,
     createAdressSchema,
-    returnEstatesByCategorySchema,
     
 }
